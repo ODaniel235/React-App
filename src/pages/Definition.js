@@ -1,22 +1,29 @@
 import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 export default function Definition() {
-  const [words, setWords] = useState();
+  const [word, setWord] = useState();
 
   useEffect(() => {
-    fetch("https://api.dictionaryapi.dev/api/v2/entries/en/hello")
+    fetch("https://api.dictionaryapi.dev/api/v2/entries/en/helicopter")
       .then((response) => response.json())
       .then((data) => {
-        setWords(data[0].meanings);
+        setWord(data[0].meanings);
         console.log(data[0].meanings);
       });
   }, []);
-  
-  return(
+
+  return (
     <>
       <h1>Here is a definition: </h1>
+      {word ? (
+        word.map((meaning) => {
+          return <p key={uuidv4()}>{meaning.definitions[0].definition}</p>;
+        })
+      ) : (
+        <p>Loading...</p>
+      )}
     </>
-  )
-
+  );
 }
 
 //https://api.dictionaryapi.dev/app/v2/entries/en/
